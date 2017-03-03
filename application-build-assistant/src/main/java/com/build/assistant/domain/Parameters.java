@@ -22,7 +22,7 @@ public class Parameters {
     @JsonProperty("applicationName")
     private String applicationName;
     @JsonProperty("Branch")
-    private List<String> branch = null;
+    private String branch = null;
     @JsonProperty("Environment")
     private String environment;
     @JsonIgnore
@@ -44,16 +44,16 @@ public class Parameters {
     }
 
     @JsonProperty("Branch")
-    public List<String> getBranch() {
+    public String getBranch() {
         return branch;
     }
 
     @JsonProperty("Branch")
-    public void setBranch(List<String> branch) {
+    public void setBranch(String branch) {
         this.branch = branch;
     }
 
-    public Parameters withBranch(List<String> branch) {
+    public Parameters withBranch(String branch) {
         this.branch = branch;
         return this;
     }

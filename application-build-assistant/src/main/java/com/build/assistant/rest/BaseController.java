@@ -59,6 +59,44 @@ public class BaseController {
         return response;
     }
 
+
+    @RequestMapping(value = "/deploy1", method = RequestMethod.POST)
+    @ResponseBody
+    public Response deployApplication1(@RequestBody String request1){
+        Response response = new Response();
+        response.setSpeech(" Successfully deployed ");
+                response.setDisplayText("Display Successfully Deployed");
+                Data data = new Data();
+                data.setAdditionalProperty("Depployed", "test");
+                response.setData(data);
+                List<Object> context = new ArrayList<>();
+                context.add("deploycontext");
+                response.setContextOut(context);
+
+        log.info("Sending Response");
+
+        return response;
+    }
+
+
+    @RequestMapping(value = "/deploy2", method = RequestMethod.POST)
+    @ResponseBody
+    public Response deployApplication2(@RequestBody String request1){
+        Response response = new Response();
+
+                response.setSpeech(" List of Branches is Dev, Master ");
+                response.setDisplayText("Got brances");
+                Data data = new Data();
+                data.setAdditionalProperty("Branch list", "ttttt");
+                response.setData(data);
+                List<Object> context = new ArrayList<>();
+                context.add("deploycontext");
+                response.setContextOut(context);
+
+        log.info("Sending Response");
+
+        return response;
+    }
     /* Get the list of available branches */
     /*@RequestMapping(value = "/branch", method = RequestMethod.GET)
     public List<String> getRelatedBraches(){

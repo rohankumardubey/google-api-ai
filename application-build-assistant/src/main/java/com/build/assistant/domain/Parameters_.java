@@ -25,7 +25,7 @@ public class Parameters_ {
     @JsonProperty("Environment.original")
     private String environmentOriginal;
     @JsonProperty("Branch")
-    private List<String> branch = null;
+    private String branch = null;
     @JsonProperty("Branch.original")
     private String branchOriginal;
     @JsonProperty("Environment")
@@ -53,16 +53,16 @@ public class Parameters_ {
     }
 
     @JsonProperty("Branch")
-    public List<String> getBranch() {
+    public String getBranch() {
         return branch;
     }
 
     @JsonProperty("Branch")
-    public void setBranch(List<String> branch) {
+    public void setBranch(String branch) {
         this.branch = branch;
     }
 
-    public Parameters_ withBranch(List<String> branch) {
+    public Parameters_ withBranch(String branch) {
         this.branch = branch;
         return this;
     }
