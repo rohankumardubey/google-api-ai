@@ -46,15 +46,18 @@ public class BaseController {
                     String name = attendees.getName();
                     data.setAdditionalProperty("name", name);
                     response.setSpeech(" Hello " + name + " , your registration is confirm, Welcome to Pune Data Conference!!");
-                    response.setDisplayText(" Hello " + name+ "  , your registration is confirm, Welcome to Pune Data Conference!!");
+                    response.setDisplayText(" Hello " + name + "  , your registration is confirm, Welcome to Pune Data Conference!!");
                     response.setData(data);
+                    log.info("got the name " + name);
                 }else{
                     response.setSpeech("Unable to find ticket number can you please try again!!");
                     response.setDisplayText("Unable to find ticket number can you please try again!!");
+                    log.info("Name is not available or missing ");
                 }
             }else{
                 response.setSpeech("Unable to find ticket number can you please try again!!");
                 response.setDisplayText("Unable to find ticket number can you please try again!!");
+                log.info("unable to get name ");
             }
             List<Object> context = new ArrayList<>();
             context.add("getName");
@@ -64,7 +67,7 @@ public class BaseController {
             e.printStackTrace();
         }
 
-        log.info("Sending Response");
+        log.info("Sending Response " + mapper.writeValueAsString(response)));
 
         return response;
     }
