@@ -30,8 +30,8 @@ public class BaseController {
     public Response deployApplication(@RequestBody Request request){
         Response response = new Response();
         Data data = new Data();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            ObjectMapper mapper = new ObjectMapper();
             System.out.println("Request incoming " + mapper.writeValueAsString(request));
             log.info("Request incoming " + mapper.writeValueAsString(request));
             log.info("Recieved Request 1 Action: " + request.getResult().getAction().toString());
@@ -66,8 +66,11 @@ public class BaseController {
             log.error(e.getMessage());
             e.printStackTrace();
         }
-
-        log.info("Sending Response " + mapper.writeValueAsString(response));
+        try {
+            log.info("Sending Response " + mapper.writeValueAsString(response));
+        }catch(Exception e){
+            log.info("Unable to read response", e);
+        }
 
         return response;
     }
