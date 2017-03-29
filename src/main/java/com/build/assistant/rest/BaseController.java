@@ -60,7 +60,7 @@ public class BaseController {
                 log.info("unable to get name ");
             }
             List<Object> context = new ArrayList<>();
-            //context.add("getName");
+            context.add("XYZ");
             response.setContextOut(context);
         }catch (Exception e){
             log.error(e.getMessage());
