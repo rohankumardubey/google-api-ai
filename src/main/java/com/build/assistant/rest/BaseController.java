@@ -67,7 +67,7 @@ public class BaseController {
             e.printStackTrace();
         }
 
-        log.info("Sending Response " + mapper.writeValueAsString(response)));
+        log.info("Sending Response " + mapper.writeValueAsString(response));
 
         return response;
     }
