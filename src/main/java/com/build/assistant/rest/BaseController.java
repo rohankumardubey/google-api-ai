@@ -45,8 +45,8 @@ public class BaseController {
                 if(attendees != null && attendees.getName() != null && !attendees.getName().equals("")) {
                     String name = attendees.getName();
                     data.setAdditionalProperty("name", name);
-                    response.setSpeech(" Hello " + name + " , your registration is confirm, Welcome to Pune Data Conference!!");
-                    response.setDisplayText(" Hello " + name + "  , your registration is confirm, Welcome to Pune Data Conference!!");
+                    response.setSpeech(" Hello " + name);
+                    response.setDisplayText(" Hello " + name);
                     response.setData(data);
                     log.info("got the name " + name);
                 }else{
