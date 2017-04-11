@@ -1,19 +1,19 @@
 package com.build.assistant.rest;
 
 import com.build.assistant.Model.Attendees;
+import com.build.assistant.Model.Sessions;
 import com.build.assistant.Repo.AttendeeRepo;
+import com.build.assistant.Repo.SessionsRepo;
 import com.build.assistant.domain.Data;
 import com.build.assistant.domain.Request;
 import com.build.assistant.domain.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @RestController
@@ -22,6 +22,9 @@ public class BaseController {
 
     @Autowired
     AttendeeRepo attendeeRepo;
+
+    @Autowired
+    SessionsRepo sessionsRepo;
 
     final org.slf4j.Logger log = LoggerFactory.getLogger(BaseController.class);
 
@@ -54,13 +57,42 @@ public class BaseController {
                     response.setDisplayText("Unable to find ticket number can you please try again!!");
                     log.info("Name is not available or missing ");
                 }
-            }else{
+            }else if(request != null && request.getResult() != null && request.getResult().getParameters().getAdditionalProperties() != null &&
+                    request.getResult().getAction().equals("getName")){
                 response.setSpeech("Unable to find ticket number can you please try again!!");
                 response.setDisplayText("Unable to find ticket number can you please try again!!");
                 log.info("unable to get name ");
+            }else if (request != null && request.getResult() != null && request.getResult().getParameters().getAdditionalProperties() != null &&
+                    request.getResult().getParameters().getAdditionalProperties().get("tags") != null && request.getResult().getAction().equals("getSchedule")) {
+
+                log.info(request.getResult().getParameters().getAdditionalProperties().get("tags").toString());
+                String[] listOfTags = request.getResult().getParameters().getAdditionalProperties().get("tags").toString().split(",");
+                List<Sessions> sessionses = sessionsRepo.findAll();
+
+                if(sessionses != null && sessionses.size() > 0) {
+                    List<String> sessionsTitles = new ArrayList<>();
+                    for(Sessions sessions : sessionses){
+                        for(String tag : listOfTags){
+                            String[] tagsOnSession = sessions.getTags().split(",");
+                            for(String tagString : tagsOnSession){
+                                if(tagString.equalsIgnoreCase(tag)){
+                                    sessionsTitles.add("Speaker " + sessions.getSpeaker() + "will be talking about " + sessions.getTitle());
+                                }
+                            }
+                        }
+                    }
+
+                    data.setAdditionalProperty("sessions", String.join(",",sessionsTitles));
+                    response.setSpeech("Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
+                    response.setDisplayText("Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
+                    response.setData(data);
+                }else{
+                    response.setSpeech("Unable to find any sessions with provided input");
+                    response.setDisplayText("Unable to find any sessions with provided input");
+                    log.info("Unable to find any sessions with provided input");
+                }
             }
             List<Object> context = new ArrayList<>();
-            //context.add("XYZ");
             response.setContextOut(context);
         }catch (Exception e){
             log.error(e.getMessage());
