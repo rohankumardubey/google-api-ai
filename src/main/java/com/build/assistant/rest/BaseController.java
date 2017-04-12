@@ -76,15 +76,15 @@ public class BaseController {
                             String[] tagsOnSession = sessions.getTags().split(",");
                             for(String tagString : tagsOnSession){
                                 if(tagString.equalsIgnoreCase(tag)){
-                                    sessionsTitles.add("Speaker " + sessions.getSpeaker() + "will be talking about " + sessions.getTitle());
+                                    sessionsTitles.add(", Speaker " + sessions.getSpeaker() + " will be talking about " + sessions.getTitle());
                                 }
                             }
                         }
                     }
 
                     data.setAdditionalProperty("sessions", String.join(",",sessionsTitles));
-                    response.setSpeech("Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
-                    response.setDisplayText("Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
+                    response.setSpeech(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
+                    response.setDisplayText(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
                     response.setData(data);
                 }else{
                     response.setSpeech("Unable to find any sessions with provided input");
