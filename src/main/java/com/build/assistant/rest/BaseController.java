@@ -45,55 +45,61 @@ public class BaseController {
 
                 Attendees attendees = attendeeRepo.findByTicketNumber(request.getResult().getParameters().getAdditionalProperties().get("number").toString());
 
-                if(attendees != null && attendees.getName() != null && !attendees.getName().equals("")) {
+                if (attendees != null && attendees.getName() != null && !attendees.getName().equals("")) {
                     String name = attendees.getName();
                     data.setAdditionalProperty("name", name);
-                    response.setSpeech(" Hello " + name + " , your registration is confirm, Welcome to Pune Data Conference!!");
-                    response.setDisplayText(" Hello " + name + "  , your registration is confirm, Welcome to Pune Data Conference!!");
+                    response.setSpeech(" Hello " + name + " , your registration is confirm, Welcome to Pune Data Conference!! What topics you are interested in, i may suggest you few relevant sessions");
+                    response.setDisplayText(" Hello " + name + "  , your registration is confirm, Welcome to Pune Data Conference!! What topics you are interested in, i may suggest you few relevant sessions");
                     response.setData(data);
                     log.info("got the name " + name);
-                }else{
+                } else {
                     response.setSpeech("Unable to find ticket number can you please try again!!");
                     response.setDisplayText("Unable to find ticket number can you please try again!!");
                     log.info("Name is not available or missing ");
                 }
-            }else if(request != null && request.getResult() != null && request.getResult().getParameters().getAdditionalProperties() != null &&
-                    request.getResult().getAction().equals("getName")){
+            } else if (request != null && request.getResult() != null && request.getResult().getParameters().getAdditionalProperties() != null &&
+                    request.getResult().getAction().equals("getName")) {
                 response.setSpeech("Unable to find ticket number can you please try again!!");
                 response.setDisplayText("Unable to find ticket number can you please try again!!");
                 log.info("unable to get name ");
-            }else if (request != null && request.getResult() != null && request.getResult().getParameters().getAdditionalProperties() != null &&
+            } else if (request != null && request.getResult() != null && request.getResult().getParameters().getAdditionalProperties() != null &&
                     request.getResult().getParameters().getAdditionalProperties().get("tags") != null && request.getResult().getAction().equals("getSchedule")) {
 
                 log.info(request.getResult().getParameters().getAdditionalProperties().get("tags").toString());
                 String[] listOfTags = request.getResult().getParameters().getAdditionalProperties().get("tags").toString().split(",");
                 List<Sessions> sessionses = sessionsRepo.findAll();
 
-                if(sessionses != null && sessionses.size() > 0) {
+                if (sessionses != null && sessionses.size() > 0) {
                     List<String> sessionsTitles = new ArrayList<>();
-                    for(Sessions sessions : sessionses){
-                        for(String tag : listOfTags){
+                    for (Sessions sessions : sessionses) {
+                        for (String tag : listOfTags) {
                             String[] tagsOnSession = sessions.getTags().split(",");
-                            for(String tagString : tagsOnSession){
-                                if(tagString.equalsIgnoreCase(tag)){
+                            for (String tagString : tagsOnSession) {
+                                if (tagString.equalsIgnoreCase(tag)) {
                                     sessionsTitles.add(", Speaker " + sessions.getSpeaker() + " will be talking about " + sessions.getTitle());
                                 }
                             }
                         }
                     }
 
-                    data.setAdditionalProperty("sessions", String.join(",",sessionsTitles));
-                    response.setSpeech(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
-                    response.setDisplayText(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
-                    response.setData(data);
-                }else{
-                    response.setSpeech("Unable to find any sessions with provided input");
-                    response.setDisplayText("Unable to find any sessions with provided input");
-                    log.info("Unable to find any sessions with provided input");
+                    if (!sessionsTitles.isEmpty()) {
+                        data.setAdditionalProperty("sessions", String.join(",", sessionsTitles));
+                        response.setSpeech(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
+                        response.setDisplayText(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles));
+                        response.setData(data);
+                    } else {
+                        response.setSpeech("Unable to find any sessions with provided input, Possible topics can be AI, ML, IOT, Analytics, streaming etc ");
+                        response.setDisplayText("Unable to find any sessions with provided input, Possible topics can be AI, ML, IOT, Analytics, streaming etc ");
+                        log.info("Unable to find any sessions with provided input, Possible topics can be AI, ML, IOT, Analytics, streaming etc ");
+                    }
                 }
+                List<Object> context = new ArrayList<>();
+                response.setContextOut(context);
+            } else {
+                response.setSpeech("Something is not good with me, can you please try again");
+                response.setDisplayText("Something is not good with me, can you please try again");
+                log.info("Something is not good with me, can you please try again");
             }
-            List<Object> context = new ArrayList<>();
-            response.setContextOut(context);
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
