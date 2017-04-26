@@ -84,8 +84,8 @@ public class BaseController {
 
                     if (!sessionsTitles.isEmpty()) {
                         data.setAdditionalProperty("sessions", String.join(",", sessionsTitles));
-                        response.setSpeech(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles) + "Is there anything else I can help with?");
-                        response.setDisplayText(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles) + "Is there anything else I can help with?");
+                        response.setSpeech(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles) + "   Is there anything else I can help with?");
+                        response.setDisplayText(" Here is the list of the sessions you may in intersted in : " + String.join(",", sessionsTitles) + "   Is there anything else I can help with?");
                         response.setData(data);
                     } else {
                         response.setSpeech("Unable to find any sessions with provided input, Possible topics can be AI, ML, IOT, Analytics, streaming etc ");
